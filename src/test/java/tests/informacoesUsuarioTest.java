@@ -2,7 +2,9 @@ package tests;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import suporte.Generator;
+import suporte.Screenshot;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +22,9 @@ import static org.junit.Assert.assertEquals;
 public class informacoesUsuarioTest {
 
     private ChromeDriver navegador;
+
+    @Rule
+    public TestName test = new TestName();
 
     @Before
     public void setUp() {
@@ -86,6 +93,12 @@ public class informacoesUsuarioTest {
         String msg = msgPop.getText();
         assertEquals("Rest in peace, dear phone!", msg);
 
+        String screenShotArquivo = "C:\\Users\\User\\Documents\\Curso_Testes\\WebDriver\\ScreenShotsTests\\"
+                + Generator.dataHoraParaArquivo()
+                + test.getMethodName()
+                + ".png";
+        Screenshot.take(navegador, screenShotArquivo);
+
         //Aguardar 10 segundos para que a janela desapareça - espera explicita
         WebDriverWait aguardar = new WebDriverWait(navegador, 10);
         aguardar.until(ExpectedConditions.stalenessOf(msgPop));
@@ -97,6 +110,6 @@ public class informacoesUsuarioTest {
     @After
     public void tearDown() {
         //Fechar navegador
-        //navegador.quit();
+        navegador.quit();
     }
 }
